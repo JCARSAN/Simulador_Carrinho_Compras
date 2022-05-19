@@ -25,15 +25,12 @@ const Home = (): JSX.Element => {
   const [products, setProducts] = useState<ProductFormatted[]>([]);
   const { addProduct, cart } = useCart();
 
-  //console.log("Cart: ",cart);
   let cartAmountItems:CartItemsAmount={};
 
   const cartItemsAmount = cart.reduce((sumAmount, product) => {
      cartAmountItems[product.id] = product.amount;
      return cartAmountItems;
   }, {} as CartItemsAmount)
-  
-  //console.log("Home cartItemsAmount: ",cartItemsAmount);
 
   useEffect(() => {
     async function loadProducts() {
@@ -46,10 +43,6 @@ const Home = (): JSX.Element => {
   }, []);
 
   function handleAddProduct(id: number) {
-    //console.log("handleAddProduct id: ",id);
-    //console.log("O item de id: ",id," foi adicionado ao carrinho");
-    //localStorage.setItem('@RocketShoes:cart',JSON.stringify([...cart,products[id]]));
-    //localStorage.removeItem('@RocketShoes:cart');
     localStorage.removeItem('@RocketShoes:productAdded');
     let newProduct;
     for(let index in products){
@@ -60,10 +53,6 @@ const Home = (): JSX.Element => {
     }
     localStorage.setItem('@RocketShoes:productAdded',JSON.stringify(newProduct));
     addProduct(id);
-    //console.log("newProduct: ",newProduct);
-    //addProduct(id);
-    //console.log("handleProduct Cart: ", cart);
-    //console.log("cartAmountItems: ",cartAmountItems);
   }
 
   return (
@@ -73,7 +62,7 @@ const Home = (): JSX.Element => {
             <li key={product.id}>
               <img src={product.image} alt={product.title} />
               <strong>{product.title}</strong>
-              <span>R$ {product.price}</span>
+              <span>R$ {formatPrice(product.price)}</span>
               <button
                 type="button"
                 data-testid="add-product-button"
